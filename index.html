@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css"
     />
+    <link rel="stylesheet" href="styles.css" />
     <script src="external-scripts/discord-markdown.umd.js"></script>
     <script src="external-scripts/highlight.min-D8D27.js"></script>
     <script src="external-scripts/lottie.min-99657.js"></script>
@@ -85,7 +86,82 @@
     <script type="module" src="index.js"></script>
   </head>
   <body>
-    <h1>Welcome to Q&amp;Aign Reader!</h1>
-    <div class="output" id="output"></div>
+    <div class="root">
+      <div class="root-header">
+        <h1 class="root-heading">Welcome to Q&amp;Aign Reader!</h1>
+        <label class="root-heading-label">
+          <span class="root-heading-label-text"
+            >Enter a link to a Q&amp;Aign's files</span
+          >
+          <input
+            class="root-heading-input"
+            name="filelink"
+            id="filelink"
+            type="url"
+          />
+        </label>
+        <button class="button" id="load-button">Load</button>
+      </div>
+      <div class="controls hidden" id="controls">
+        <button
+          title="Previous Chapter"
+          type="button"
+          class="round button"
+          id="prev-chapter"
+          name="prev-chapter"
+        >
+          <i class="prev icon" title="Previous Chapter">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="40"
+              viewBox="0 -960 960 960"
+              width="40"
+            >
+              <path
+                fill="currentcolor"
+                d="M286.999-446.667 527-206.666 480-160 160-480l320-320 47 46.666-240.001 240.001H800v66.666H286.999Z"
+              />
+            </svg>
+          </i>
+        </button>
+        <div class="mobile-column">
+          <select
+            title="Select Chapter"
+            class="button"
+            name="chapter"
+            id="chapterselect"
+          ></select>
+          <select
+            title="Select Sub-Chapter"
+            class="button"
+            name="subchapter"
+            id="subchapterselect"
+          ></select>
+        </div>
+        <button
+          title="Next Chapter"
+          type="button"
+          class="round button"
+          id="next-chapter"
+          name="next-chapter"
+        >
+          <i class="next icon" title="Next Chapter">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="40"
+              viewBox="0 -960 960 960"
+              width="40"
+            >
+              <path
+                fill="currentcolor"
+                d="M673.001-446.667H160v-66.666h513.001L433-753.334 480-800l320 320-320 320-47-46.666 240.001-240.001Z"
+              />
+            </svg>
+          </i>
+        </button>
+      </div>
+      <div id="loader" class="loading hidden"><span></span>Loading...</div>
+      <div class="output" id="output"></div>
+    </div>
   </body>
 </html>
