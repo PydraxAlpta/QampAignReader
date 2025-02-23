@@ -7,10 +7,14 @@ export function drawChapter(chapterJson, baseUrl, output) {
   if (!chapterJson) {
     return;
   }
+  output.innerHTML = "";
   const name = chapterJson.name;
   const heading = document.createElement("h2");
   heading.textContent = name;
   output.appendChild(heading);
+  setTimeout(() => {
+    heading.scrollIntoView(false); // reset scroll in chapters
+  }, 10);
   const entries = chapterJson.entries;
   for (const entry of entries) {
     addPreamble(entry, baseUrl, output);
@@ -74,6 +78,8 @@ function addPreamble(entry, baseUrl, output) {
   channelEntry.classList.add("preamble__entry");
   channelEntry.textContent = entry.channel?.name ?? "Channel Name"; // Fallback
   entriesContainer.append(guildEntry, channelEntry);
+  const firstMessageId = entry.messages?.[0]?.id;
+  preamble.dataset.firstMessageId = firstMessageId;
   preamble.appendChild(entriesContainer);
   output.appendChild(preamble);
 }

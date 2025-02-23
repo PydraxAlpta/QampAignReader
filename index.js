@@ -3,8 +3,27 @@ import { drawChapter } from "./draw-chapter.js";
 const output = document.querySelector("#output");
 /**@type {HTMLInputElement} */
 const input = document.querySelector("#filelink");
+/**@type {HTMLButtonElement} */
 const loadBtn = document.querySelector("#load-button");
+/** @type {HTMLDivElement} */
+const controls = document.querySelector("#controls");
+/** @type {HTMLSelectElement} */
+const chapterSelect = document.querySelector("#chapterselect");
+/** @type {HTMLSelectElement} */
+const subChapterSelect = document.querySelector("#subchapterselect");
+/** @type {HTMLButtonElement} */
+const prevButton = document.querySelector("#prev-chapter");
+/** @type {HTMLButtonElement} */
+const nextButton = document.querySelector("#next-chapter");
+/** @type {HTMLDivElement} */
+const loader = document.querySelector("#loader");
+/**@type {HTMLParagraphElement} */
+const title = document.querySelector("#title");
 
+/**
+ * @param {string} url
+ * @returns {Promise}
+ */
 async function fetchChapter(url) {
   const response = await fetch(url);
   if (!response.ok) {
@@ -15,6 +34,7 @@ async function fetchChapter(url) {
     return data;
   }
 }
+let currentUrl = "";
 
 loadBtn.addEventListener("click", async () => {
   try {
@@ -24,9 +44,9 @@ loadBtn.addEventListener("click", async () => {
       if (!data) {
         throw new Error("valid data not present in file");
       }
-      console.log(data.name, data.chapters, data.format);
+      currentUrl = url.href;
       alert("Loading successful");
-      renderChapterJson(new URL(data.chapters[0], url.href).href);
+      loadChapters(data.name, data.chapters);
     }
   } catch (err) {
     console.error("Error loading index file", err, input.value);
@@ -34,20 +54,98 @@ loadBtn.addEventListener("click", async () => {
   }
 });
 
+function loadChapters(name, chapters) {
+  title.innerText = name;
+  chapterSelect.innerHTML = "";
+  for (const chapter of chapters) {
+    const option = document.createElement("option");
+    option.text = getChapterName(chapter.name);
+    option.value = chapter.file;
+    chapterSelect.appendChild(option);
+  }
+  controls.classList.remove("hidden");
+  loadChapter();
+}
+
+async function loadChapter() {
+  const value = chapterSelect.value;
+  const chapterUrl = new URL(value, currentUrl);
+  const chapterJson = await renderChapterJson(chapterUrl, currentUrl);
+  subChapterSelect.innerHTML = "";
+  for (let index = 0; index < chapterJson.entries.length; index++) {
+    const entry = chapterJson.entries[index];
+    const option = document.createElement("option");
+    option.text = `Sub-Chapter ${index + 1}`;
+    option.value = entry.messages?.[0]?.id;
+    subChapterSelect.appendChild(option);
+  }
+}
+
+async function gotoSubChapter() {
+  const value = subChapterSelect.value;
+  const preamble = document.querySelector(`[data-first-message-id="${value}"`);
+  console.log(value, preamble);
+  preamble?.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+    inline: "nearest",
+  });
+}
+
+function handlePrevChapter() {
+  if (chapterSelect.selectedIndex === 0) {
+    return;
+  }
+  chapterSelect.selectedIndex--;
+  loadChapter();
+}
+
+function handleNextChapter() {
+  if (chapterSelect.selectedIndex === chapterSelect.options.length - 1) {
+    return;
+  }
+  chapterSelect.selectedIndex++;
+  loadChapter();
+}
+
+chapterSelect.addEventListener("change", loadChapter);
+subChapterSelect.addEventListener("change", gotoSubChapter);
+prevButton.addEventListener("click", handlePrevChapter);
+nextButton.addEventListener("click", handleNextChapter);
+
+/**
+ * @param {string} chapterName
+ * @returns {string}
+ */
+function getChapterName(chapterName) {
+  if (chapterName.includes("/")) {
+    return chapterName.split("/").at(-1);
+  } else if (chapterName.includes("\\")) {
+    return chapterName.split("\\").at(-1);
+  }
+  return chapterName;
+}
+
 async function fetchIndexJson(url) {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error("Failed to fetch data");
   }
   const data = await response.json();
-  if (data.name && data.chapters && data.format === "json") {
+  if (data.name && Array.isArray(data.chapters) && data.format === "json") {
     return data;
   } else {
     console.log("loaded data", data);
   }
 }
 
-async function renderChapterJson(url) {
+async function renderChapterJson(url, baseUrl) {
+  loader.classList.remove("hidden");
+  output.classList.add("hidden");
   const chapterJson = await fetchChapter(url);
-  drawChapter(chapterJson, url, output);
+  console.log("Rendering chapter", url, baseUrl, chapterJson);
+  drawChapter(chapterJson, baseUrl, output);
+  loader.classList.add("hidden");
+  output.classList.remove("hidden");
+  return chapterJson;
 }

@@ -115,6 +115,19 @@ button:disabled {
   justify-content: center;
 }
 
+.output {
+  overflow-y: auto;
+  max-height: calc(100vh - 270px);
+}
+@media screen and (width < 720px) {
+  .output {
+    max-height: calc(100vh - 310px);
+  }
+  .root {
+    padding: 0 0.5rem;
+  }
+}
+
 .hidden {
   display: none !important;
 }
