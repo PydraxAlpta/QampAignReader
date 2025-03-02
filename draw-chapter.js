@@ -298,6 +298,16 @@ function getMessageContent(content, inlineEmojis, baseUrl) {
     img.title = match?.code ?? code;
     img.loading = "lazy";
   });
+  const links = div.querySelectorAll("a");
+  links.forEach((link) => {
+    const match = link.href.match(/\d+\/\d+\/(\d+)/);
+    if (match?.[1]) {
+      const id = match[1];
+      const containerId = getMessageContainerId({ id });
+      link.href = `#${containerId}`;
+      link.onclick = (evt) => scrollToMessage(evt, id);
+    }
+  });
   // for now, let's just put content as is. Have to figure out the markdown parsing. Maybe a library.
   return div.innerHTML;
   // return content;

@@ -123,6 +123,10 @@ button:disabled {
   }
 }
 
+.preamble {
+  scroll-margin: 100px;
+}
+
 .hidden {
   display: none !important;
 }
