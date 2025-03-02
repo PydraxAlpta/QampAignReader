@@ -36,7 +36,9 @@ async function fetchChapter(url) {
 }
 let currentUrl = "";
 
-loadBtn.addEventListener("click", async () => {
+loadBtn.addEventListener("click", loadQampaign);
+
+async function loadQampaign() {
   try {
     const url = new URL(input.value, window.location.origin);
     if (url.href) {
@@ -45,14 +47,16 @@ loadBtn.addEventListener("click", async () => {
         throw new Error("valid data not present in file");
       }
       currentUrl = url.href;
-      alert("Loading successful");
+      const windowUrl = new URL(window.location.href);
+      windowUrl.searchParams.set("link", currentUrl);
+      window.history.replaceState(undefined, undefined, windowUrl.href);
       loadChapters(data.name, data.chapters);
     }
   } catch (err) {
     console.error("Error loading index file", err, input.value);
     alert("Please check your link");
   }
-});
+}
 
 function loadChapters(name, chapters) {
   title.innerText = name;
@@ -79,12 +83,13 @@ async function loadChapter() {
     option.value = entry.messages?.[0]?.id;
     subChapterSelect.appendChild(option);
   }
+  const windowUrl = new URL(window.location.href);
+  windowUrl.searchParams.set("chapter", chapterSelect.selectedIndex);
 }
 
 async function gotoSubChapter() {
   const value = subChapterSelect.value;
   const preamble = document.querySelector(`[data-first-message-id="${value}"`);
-  console.log(value, preamble);
   preamble?.scrollIntoView({
     behavior: "smooth",
     block: "start",
@@ -135,7 +140,7 @@ async function fetchIndexJson(url) {
   if (data.name && Array.isArray(data.chapters) && data.format === "json") {
     return data;
   } else {
-    console.log("loaded data", data);
+    console.error("error loading json data", data);
   }
 }
 
@@ -143,9 +148,32 @@ async function renderChapterJson(url, baseUrl) {
   loader.classList.remove("hidden");
   output.classList.add("hidden");
   const chapterJson = await fetchChapter(url);
-  console.log("Rendering chapter", url, baseUrl, chapterJson);
   drawChapter(chapterJson, baseUrl, output);
   loader.classList.add("hidden");
   output.classList.remove("hidden");
   return chapterJson;
 }
+
+window.addEventListener("DOMContentLoaded", async () => {
+  const url = new URL(window.location.href);
+  const searchParams = url.searchParams;
+  const link = searchParams.get("link");
+  if (!link) {
+    return;
+  }
+
+  input.value = link;
+  await loadQampaign();
+  const chapter = url.searchParams.get("chapter");
+  if (!chapter) {
+    return;
+  }
+  chapterSelect.selectedIndex = parseInt(chapter);
+  await loadChapter();
+  const subChapter = url.searchParams.get("subchapter");
+  if (!subChapter) {
+    return;
+  }
+  subChapterSelect.selectedIndex = parseInt(subChapter);
+  await gotoSubChapter();
+});
