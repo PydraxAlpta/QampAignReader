@@ -47,15 +47,23 @@ async function loadQampaign() {
         throw new Error("valid data not present in file");
       }
       currentUrl = url.href;
-      const windowUrl = new URL(window.location.href);
-      windowUrl.searchParams.set("link", currentUrl);
-      window.history.replaceState(undefined, undefined, windowUrl.href);
+      updateWindowUrl("link", currentUrl);
       loadChapters(data.name, data.chapters);
     }
   } catch (err) {
     console.error("Error loading index file", err, input.value);
     alert("Please check your link");
   }
+}
+
+/**
+ * @param {string} key
+ * @param {string} value
+ */
+function updateWindowUrl(key, value) {
+  const windowUrl = new URL(window.location.href);
+  windowUrl.searchParams.set(key, value);
+  window.history.replaceState(undefined, undefined, windowUrl.href);
 }
 
 function loadChapters(name, chapters) {
@@ -83,8 +91,7 @@ async function loadChapter() {
     option.value = entry.messages?.[0]?.id;
     subChapterSelect.appendChild(option);
   }
-  const windowUrl = new URL(window.location.href);
-  windowUrl.searchParams.set("chapter", chapterSelect.selectedIndex);
+  updateWindowUrl("chapter", chapterSelect.selectedIndex.toString());
 }
 
 async function gotoSubChapter() {

@@ -15,29 +15,32 @@ body {
   align-items: stretch;
 }
 .controls {
+  position: sticky;
+  z-index: 100;
+  top: 0;
   margin-top: 0.5rem;
   margin-bottom: 0.5em;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   gap: 0.5rem;
+  background-color: #36393e;
 }
 
-.controls .button,
-.root-header .button {
+.q-button {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 0.125em;
-  width: 250px;
-  height: 3em;
+  width: auto;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
   background: #36393e99;
   color: white;
   border: 1px solid slategray;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
 }
-.controls .round.button {
+.round.q-button {
   height: 3em;
   width: 3em;
   display: flex;
@@ -46,15 +49,8 @@ body {
   border-radius: 50%;
   padding: 0;
 }
-.controls .button:hover,
-.root-header .button:hover {
+.q-button:hover {
   color: #ddd;
-}
-
-.root-header .button {
-  width: auto;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0;
 }
 
 button:disabled {
@@ -69,13 +65,19 @@ button:disabled {
 
 .mobile-column {
   display: flex;
+  justify-content: space-around;
   align-items: center;
   gap: 0.5rem;
+  flex: 1;
 }
-@media screen and (width < 720px) {
+@media screen and (width < 460px) {
   .mobile-column {
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0;
+  }
+  .mobile-column select {
+    width: 100%;
+    margin: 0.25rem;
   }
 }
 
@@ -115,14 +117,7 @@ button:disabled {
   justify-content: center;
 }
 
-.output {
-  overflow-y: auto;
-  max-height: calc(100vh - 270px);
-}
 @media screen and (width < 720px) {
-  .output {
-    max-height: calc(100vh - 310px);
-  }
   .root {
     padding: 0 0.5rem;
   }
