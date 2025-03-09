@@ -126,6 +126,9 @@ button:disabled {
 .preamble {
   scroll-margin: 100px;
 }
+.chatlog__message-container {
+  scroll-margin: 50px;
+}
 
 .hidden {
   display: none !important;

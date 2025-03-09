@@ -16,8 +16,9 @@ export function drawChapter(chapterJson, baseUrl, output) {
     heading.scrollIntoView(false); // reset scroll in chapters
   }, 10);
   const entries = chapterJson.entries;
-  for (const entry of entries) {
-    addPreamble(entry, baseUrl, output);
+  for (let index = 0; index < entries.length; ++index) {
+    const entry = entries[index];
+    addPreamble(entry, index, baseUrl, output);
     const chatlog = document.createElement("div");
     chatlog.classList.add("chatlog");
     const messageGroup = document.createElement("div");
@@ -55,9 +56,11 @@ function getSrc(url, baseUrl) {
 const fallbackImage = "https://placehold.co/100";
 /**
  * @param {*} entry
+ * @param {number} index
+ * @param {string} baseUrl
  * @param {Element} output
  */
-function addPreamble(entry, baseUrl, output) {
+function addPreamble(entry, index, baseUrl, output) {
   const preamble = document.createElement("div");
   preamble.classList.add("preamble");
   const iconContainer = document.createElement("div");
@@ -73,10 +76,13 @@ function addPreamble(entry, baseUrl, output) {
   entriesContainer.classList.add("preamble__entries-container");
   const guildEntry = document.createElement("div");
   guildEntry.classList.add("preamble__entry");
-  guildEntry.textContent = entry.guild?.name ?? "Guild Name"; // Fallback
+  const guildName = entry.guild?.name ?? "Guild Name";
+  guildEntry.textContent = guildName; // Fallback
   const channelEntry = document.createElement("div");
   channelEntry.classList.add("preamble__entry");
-  channelEntry.textContent = entry.channel?.name ?? "Channel Name"; // Fallback
+  const categoryName = entry.channel?.category ?? "Uncategorized";
+  const channelName = entry.channel?.name ?? "Channel Name";
+  channelEntry.textContent = `${index + 1}: ${categoryName} / ${channelName}`; // Fallback
   entriesContainer.append(guildEntry, channelEntry);
   const firstMessageId = entry.messages?.[0]?.id;
   preamble.dataset.firstMessageId = firstMessageId;
