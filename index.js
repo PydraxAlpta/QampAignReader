@@ -19,6 +19,8 @@ const nextButton = document.querySelector("#next-chapter");
 const loader = document.querySelector("#loader");
 /**@type {HTMLParagraphElement} */
 const title = document.querySelector("#title");
+/**@type {HTMLInputElement} */
+const showEdited = document.querySelector("#show-edited");
 
 /**
  * @param {string} url
@@ -36,7 +38,29 @@ async function fetchChapter(url) {
 }
 let currentUrl = "";
 
+input.addEventListener("keydown", (evt) => {
+  if (evt.key === "Enter") {
+    if (input.value.trim()) {
+      loadQampaign();
+    }
+  }
+});
+input.addEventListener("paste", () => {
+  setTimeout(() => {
+    if (input.value.trim()) {
+      loadQampaign();
+    }
+  }, 10); // input isn't initialized until after paste
+});
 loadBtn.addEventListener("click", loadQampaign);
+
+showEdited.addEventListener("input", () => {
+  if (showEdited.checked) {
+    output.classList.remove("no-edited");
+  } else {
+    output.classList.add("no-edited");
+  }
+});
 
 async function loadQampaign() {
   try {
