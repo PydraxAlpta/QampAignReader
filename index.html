@@ -126,22 +126,20 @@
     <script type="module" src="index.js"></script>
   </head>
   <body>
-    <div class="root">
-      <div class="root-header">
-        <h1 class="root-heading">Welcome to Q&amp;Aign Reader!</h1>
-        <label class="root-heading-label">
-          <span class="root-heading-label-text"
-            >Enter a link to a Q&amp;Aign's files</span
-          >
-          <input
-            class="root-heading-input"
-            name="filelink"
-            id="filelink"
-            type="url"
-          />
-        </label>
-        <button class="q-button load-button" id="load-button">Load</button>
-      </div>
+    <header class="root-header">
+      <h1 class="root-heading">Welcome to Q&amp;Aign Reader!</h1>
+      <label class="root-heading-label">
+        <span class="root-heading-label-text"
+          >Enter a link to a Q&amp;Aign's files</span
+        >
+        <input
+          class="root-heading-input"
+          name="filelink"
+          id="filelink"
+          type="url"
+        />
+      </label>
+      <button class="q-button load-button" id="load-button">Load</button>
       <details class="settings">
         <summary>Settings</summary>
         <section class="settings-content">
@@ -152,67 +150,70 @@
           >
         </section>
       </details>
-      <div class="controls hidden" id="controls">
-        <button
-          title="Previous Chapter"
-          type="button"
-          class="round q-button"
-          id="prev-chapter"
-          name="prev-chapter"
-        >
-          <i class="prev icon" title="Previous Chapter">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="40"
-              viewBox="0 -960 960 960"
-              width="40"
-            >
-              <path
-                fill="currentcolor"
-                d="M286.999-446.667 527-206.666 480-160 160-480l320-320 47 46.666-240.001 240.001H800v66.666H286.999Z"
-              />
-            </svg>
-          </i>
-        </button>
-        <div class="mobile-column">
-          <select
-            title="Select Chapter"
-            class="q-button"
-            name="chapter"
-            id="chapterselect"
-          ></select>
-          <select
-            title="Select Sub-Chapter"
-            class="q-button"
-            name="subchapter"
-            id="subchapterselect"
-          ></select>
-        </div>
-        <button
-          title="Next Chapter"
-          type="button"
-          class="round q-button"
-          id="next-chapter"
-          name="next-chapter"
-        >
-          <i class="next icon" title="Next Chapter">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="40"
-              viewBox="0 -960 960 960"
-              width="40"
-            >
-              <path
-                fill="currentcolor"
-                d="M673.001-446.667H160v-66.666h513.001L433-753.334 480-800l320 320-320 320-47-46.666 240.001-240.001Z"
-              />
-            </svg>
-          </i>
-        </button>
+    </header>
+
+    <nav class="controls hidden" id="controls">
+      <button
+        title="Previous Chapter"
+        type="button"
+        class="round q-button"
+        id="prev-chapter"
+        name="prev-chapter"
+      >
+        <i class="prev icon" title="Previous Chapter">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="40"
+            viewBox="0 -960 960 960"
+            width="40"
+          >
+            <path
+              fill="currentcolor"
+              d="M286.999-446.667 527-206.666 480-160 160-480l320-320 47 46.666-240.001 240.001H800v66.666H286.999Z"
+            />
+          </svg>
+        </i>
+      </button>
+      <div class="mobile-column">
+        <select
+          title="Select Chapter"
+          class="q-button"
+          name="chapter"
+          id="chapterselect"
+        ></select>
+        <select
+          title="Select Sub-Chapter"
+          class="q-button"
+          name="subchapter"
+          id="subchapterselect"
+        ></select>
       </div>
+      <button
+        title="Next Chapter"
+        type="button"
+        class="round q-button"
+        id="next-chapter"
+        name="next-chapter"
+      >
+        <i class="next icon" title="Next Chapter">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="40"
+            viewBox="0 -960 960 960"
+            width="40"
+          >
+            <path
+              fill="currentcolor"
+              d="M673.001-446.667H160v-66.666h513.001L433-753.334 480-800l320 320-320 320-47-46.666 240.001-240.001Z"
+            />
+          </svg>
+        </i>
+      </button>
+    </nav>
+    <main>
       <p class="title" id="title">No Q&amp;Aign Loaded.</p>
       <div id="loader" class="loading hidden"><span></span>Loading...</div>
-      <div class="output" id="output"></div>
-    </div>
+      <article class="output" id="output"></article>
+    </main>
   </body>
 </html>
