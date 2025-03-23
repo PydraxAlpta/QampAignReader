@@ -161,16 +161,16 @@ function addMessageChatlogReply(message, baseUrl, messagePrimary, messages) {
   chatlogReply.appendChild(author);
   const content = document.createElement("div");
   content.classList.add("chatlog__reply-content");
-  const link = document.createElement("span");
+  const link = document.createElement("a");
   link.classList.add("chatlog__reply-link");
-  link.addEventListener("click", (event) =>
-    scrollToMessage(event, replyMessage.id)
-  );
+  link.href = `#${getMessageContainerId(replyMessage)}`;
   const split = replyMessage.content.split("\n");
-  link.innerHTML = getMessageContent(
-    split[0] + (split[1] ? "..." : ""),
-    replyMessage.inlineEmojis,
-    baseUrl
+  link.replaceChildren(
+    ...getMessageContent(
+      split[0] + (split[1] ? "..." : ""),
+      replyMessage.inlineEmojis,
+      baseUrl
+    )
   );
   content.appendChild(link);
   chatlogReply.appendChild(content);
@@ -311,11 +311,14 @@ function getMessageContent(content, inlineEmojis, baseUrl) {
       const id = match[1];
       const containerId = getMessageContainerId({ id });
       link.href = `#${containerId}`;
-      link.onclick = (evt) => scrollToMessage(evt, id);
     }
   });
-  // for now, let's just put content as is. Have to figure out the markdown parsing. Maybe a library.
-  return div.innerHTML;
+  const spoilers = div.querySelectorAll(".d-spoiler");
+  spoilers.forEach((sp) => {
+    sp.classList.replace("d-spoiler", "chatlog__markdown-spoiler--hidden");
+    sp.addEventListener("click", showSpoiler);
+  });
+  return div.childNodes;
   // return content;
 }
 
@@ -329,10 +332,8 @@ function addMessageChatlogContent(message, baseUrl, messagePrimary) {
   chatlogContent.classList.add("chatlog__content");
   chatlogContent.classList.add("chatlog__markdown");
   const chatlogMarkdown = document.createElement("span");
-  chatlogMarkdown.innerHTML = getMessageContent(
-    message.content,
-    message.inlineEmojis,
-    baseUrl
+  chatlogMarkdown.replaceChildren(
+    ...getMessageContent(message.content, message.inlineEmojis, baseUrl)
   );
   chatlogContent.appendChild(chatlogMarkdown);
   if (message.timestampEdited) {

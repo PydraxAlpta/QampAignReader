@@ -6,6 +6,4 @@ This is a project to create a reader for jsons produced using QampAign Maker. It
 
 The following libraries are used and stored in /external-scripts.
 
-- highlight.js
-- airbnb/lottie-web
 - @odiffey/discord-markdown

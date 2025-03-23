@@ -129,6 +129,9 @@ button:disabled {
 .no-edited .chatlog__edited-timestamp {
   display: none;
 }
+.chatlog__reply-link {
+  color: inherit;
+}
 
 .hidden {
   display: none !important;
